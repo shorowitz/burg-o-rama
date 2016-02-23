@@ -12,16 +12,16 @@ burgers.route('/')
   res.send(burgerData);
 })
 
-.post(function(req,res) {
-  burgerData.push(req.body)
-  var newID = burgerData.length-1;
-  res.redirect('./'+ newID)
-});
 
 burgers.route('/new')
   .get(function(req,res) {
 	res.send('this will be a new burger form')
   })
+  .post(function(req,res) {
+    burgerData.push(req.body)
+    var newID = burgerData.length-1;
+    res.redirect('./'+ newID)
+  });
 
 burgers.route('/:burgerID')
 .get(function (req, res){
