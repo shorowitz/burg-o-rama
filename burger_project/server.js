@@ -1,5 +1,5 @@
 'use strict'
-
+var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -7,7 +7,7 @@ var logger = require('morgan');
 var burgerRoutes = require(path.join(__dirname, '/routes/burgers'));
 
 //app settings
-var app = require('express');
+var app = express();
 var port = process.env.PORT || 3000;
 
 //parse incoming forms
