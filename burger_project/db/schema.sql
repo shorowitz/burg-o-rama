@@ -1,17 +1,50 @@
-BEGIN
+DROP TABLE if exists cheeses CASCADE;
+DROP TABLE if exists toppings CASCADE;
+DROP TABLE if exists buns CASCADE;
+DROP TABLE if exists meats CASCADE;
+DROP TABLE if exists orders CASCADE;
+DROP TABLE if exists cheeses_orders_join CASCADE;
+DROP TABLE if exists toppings_orders_join CASCADE;
 
-CREATE TABLE orders (
-  ID SERIAL UNIQUE PRIMARY KEY,
-  meat_id FOREIGN KEY REFERENCES meat(id),
-  buns_id FOREIGN KEY REFERENCES
-​
+CREATE TABLE cheeses (
+    cheese_id serial PRIMARY KEY UNIQUE,
+    name VARCHAR(255),
+    country VARCHAR(255)
+);
 
-CREATE TABLE cheese_join(
-  burgers_id FOREIGN KEY REFERENCES burgers, -- PK, FK1 burgers_id Primary key for this table is a combo of PK, FK1
-  cheese_id FOREIGN KEY REFERENCES cheese -- PK, FK2 cheese_id
-)
---create index on name of table col
-CREATE TABLE toppings_join(
-  burgers_id FOREIGN KEY REFERENCES burgers,
-  toppings_id FOREIGN KEY REFERENCES toppings
-)
+CREATE TABLE toppings (
+  topping_id serial PRIMARY KEY UNIQUE,
+  name VARCHAR(255)
+);
+
+CREATE TABLE buns (
+  bun_id serial PRIMARY KEY UNIQUE,
+  name VARCHAR(255),
+  gluten_free BOOLEAN
+);
+
+CREATE TABLE meats(
+  meat_id serial PRIMARY KEY UNIQUE,
+  name VARCHAR(255),
+  type VARCHAR(255)
+);
+
+CREATE TABLE orders(
+  order_id serial PRIMARY KEY UNIQUE,
+  name text,
+  meat_id  integer REFERENCES meats,
+  bun_id integer REFERENCES buns,
+  doneness VARCHAR(255)
+);
+
+CREATE TABLE cheeses_orders_join (
+       order_id integer REFERENCES orders,
+       cheese_id integer REFERENCES cheeses,
+       PRIMARY KEY (order_id, cheese_id)
+);
+
+CREATE TABLE toppings_orders_join (
+       order_id integer REFERENCES orders,
+       topping_id integer REFERENCES toppings,
+       PRIMARY KEY (order_id, topping_id)
+);
