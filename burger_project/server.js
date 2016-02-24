@@ -1,10 +1,15 @@
 'use strict'
+require('dotenv').config();
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var logger = require('morgan');
 var burgerRoutes = require(path.join(__dirname, '/routes/burgers'));
+var pg = require('pg');
+var connectionString = 'postgres://sarashorowitz:' + process.env.DB_password + '@localhost/burgers';
+var db = require('./db/pg');
+
 
 //app settings
 var app = express();
@@ -24,16 +29,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 
 //views
+app.set('views', './views');
 app.set('view engine', 'ejs');
 
 //routes
 app.get('/', function (req, res) {
-  res.send('Burger Home');
+  res.render('./pages/home.html.ejs');
 });
 
 //Burger routes
 app.use('/burgers', burgerRoutes);
 
-app.listen(port,()=>
+app.listen(port, function(req, res) {
   console.log('Im listening on', port,'//', new Date())
-)
+})

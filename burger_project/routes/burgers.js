@@ -2,38 +2,43 @@
 
 var express = require('express');
 var burgers = express.Router();
-// var db = require('../db/pg');
-// var request = require('request');
+var db = require('../db/pg');
+var bodyParser = require('body-parser');
 
 var burgerData = [];
 
 burgers.route('/')
-.get(function(req,res) {
-  res.send(burgerData);
+.get( db.showAllBurgers, function(req,res) {
+  res.render('./pages/burgers-all.html.ejs', {data: res.rows});
 })
-
-.post(function(req,res) {
-  burgerData.push(req.body)
-  var newID = burgerData.length-1;
-  res.redirect('./'+ newID)
+.post(db.createBurger, function(req,res) {
+  res.redirect('./' + res.rows[0].order_id);
+  // console.log(req.body);
 });
+
 
 burgers.route('/new')
   .get(function(req,res) {
-	res.send('this will be a new burger form')
-  })
+	res.render('./pages/burgers-edit.html.ejs', {
+    data:{
+   title:'Create your Dream Burger',
+   burgerURL:'/burgers/',
+   submitMethod:'post'
+    }
+  });
+});
 
-burgers.route('/:burgerID')
-.get(function (req, res){
-  var bID = req.params.burgerID;
+
+burgers.route('/:id')
+.get(db.showOneBurger, function (req, res){
+  console.log(res.rows)
   // if there is not a burger at position :burgerID, throw a non-specific error
-  if(!(bID in burgerData)){
-    res.sendStatus(404);
-    return;
-  }
-  res.send(burgerData[bID]);
+  // if(!(bID in burgerData)){
+  //   res.sendStatus(404);
+  //   return;
+  // }
+  res.render('./pages/burger-one.html.ejs', {data: res.rows[0]})
 })
-
 .put(function(req,res){
     var bID = req.params.burgerID;
     console.log("PUUUUUUUT", req.body)
