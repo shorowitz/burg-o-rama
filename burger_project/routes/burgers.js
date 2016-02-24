@@ -8,11 +8,11 @@ var bodyParser = require('body-parser');
 var burgerData = [];
 
 burgers.route('/')
-.get(function(req,res) {
-  res.send('reroute');
+.get( db.showAllBurgers, function(req,res) {
+  res.render('./pages/burgers-all.html.ejs', {data: res.rows});
 })
 .post(db.createBurger, function(req,res) {
-  res.redirect('./show')
+  res.redirect('./' + res.rows[0].order_id);
   // console.log(req.body);
 });
 
@@ -29,7 +29,7 @@ burgers.route('/new')
 });
 
 
-burgers.route('/show')
+burgers.route('/:id')
 .get(db.showOneBurger, function (req, res){
   console.log(res.rows)
   // if there is not a burger at position :burgerID, throw a non-specific error
@@ -37,10 +37,8 @@ burgers.route('/show')
   //   res.sendStatus(404);
   //   return;
   // }
-  res.render('./pages/burger-one.html.ejs', {data: res.rows});
-
+  res.render('./pages/burger-one.html.ejs', {data: res.rows[0]})
 })
-
 .put(function(req,res){
     var bID = req.params.burgerID;
     console.log("PUUUUUUUT", req.body)

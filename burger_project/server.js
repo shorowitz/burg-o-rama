@@ -1,4 +1,5 @@
 'use strict'
+require('dotenv').config();
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
@@ -6,8 +7,9 @@ var methodOverride = require('method-override');
 var logger = require('morgan');
 var burgerRoutes = require(path.join(__dirname, '/routes/burgers'));
 var pg = require('pg');
-var connectionString = 'postgres://sarashorowitz:Bugs3588@localhost/burgers';
-var db = require('./db/pg')
+var connectionString = 'postgres://sarashorowitz:' + process.env.DB_password + '@localhost/burgers';
+var db = require('./db/pg');
+
 
 //app settings
 var app = express();
