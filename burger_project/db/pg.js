@@ -145,6 +145,46 @@ function showAllBurgers(req, res, next) {
  })
 }
 
+function editBurger (req, res, next)  {
+  pg.connect(connectionString, function (err, client, done) {
+    if (err) {
+      done();
+      console.log(err);
+      res.status(500).json({success: false, data: err});
+    }
+    console.log(req.body);
+
+    var query = client.query('UPDATE orders SET name = $1, meat_id = $2, bun_id = $3 WHERE order_id = $4', [req.body.name, req.body.meat, req.body.buns, req.params.orderid], function (err, results) {
+      // done();
+
+      if (err) {
+        console.error('Error with query', err);
+      }
+
+      // var query = client.query('DELETE FROM proficiencies WHERE masseuist_id = $1', [req.params.id], (err, result) => {
+      //   req.body.massages.forEach((massage, index) => {
+      //     client.query('INSERT INTO proficiencies (masseuist_id, massage_id) VALUES ($1, $2)', [req.params.id, parseInt(massage)], (err, results) => {
+      //       if (err) {
+      //         console.error('Error with query', err);
+      //       }
+
+            // if (index === req.body.orders.length - 1) {
+            //   done();
+            //   next();
+            // }
+            done();
+            next();
+          // });
+        // });
+      // });
+
+      // next();
+    });
+
+  });
+
+};
+
 
 module.exports.createBurger = createBurger;
 module.exports.showOneBurger = showOneBurger;
